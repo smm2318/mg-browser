@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="mg-g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9d6bff"/>
+      <stop offset="0.45" stop-color="#6d5efc"/>
+      <stop offset="1" stop-color="#20c7e0"/>
+    </linearGradient>
+    <linearGradient id="mg-gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="0.55" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="mg-glow" cx="0.2" cy="0" r="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="mg-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#1b1140" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <g filter="url(#mg-shadow)">
+    <rect x="28" y="28" width="456" height="456" rx="118" fill="url(#mg-g)"/>
+    <rect x="28" y="28" width="456" height="456" rx="118" fill="url(#mg-gloss)"/>
+    <rect x="28" y="28" width="456" height="456" rx="118" fill="url(#mg-glow)"/>
+    <rect x="29.5" y="29.5" width="453" height="453" rx="116.5" fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="3"/>
+  </g>
+  <path d="M148 356V166l108 114 108-114v190" fill="none" stroke="#ffffff" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M392 96l9.5 24.5L426 130l-24.5 9.5L392 164l-9.5-24.5L358 130l24.5-9.5z" fill="#ffffff" fill-opacity="0.95"/>
+</svg>

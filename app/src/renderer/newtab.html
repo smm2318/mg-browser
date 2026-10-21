@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https: file:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <title>MG Browser</title>
+  <link rel="stylesheet" href="newtab.css">
+</head>
+<body>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+
+  <main class="wrap">
+    <div class="brand">
+      <img src="assets/logo.svg" alt="">
+      <span>MG Browser</span>
+      <span class="dot">.</span>
+    </div>
+    <h1 id="greeting">Good evening</h1>
+    <p class="subtitle" id="subtitle">Where would you like to go?</p>
+
+    <div class="search-shell">
+      <form class="search" id="searchForm" autocomplete="off">
+        <button type="button" class="engine-btn" id="engineBtn" title="Switch search engine">
+          <span class="engine-glyph" id="engineGlyph">G</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <input id="q" type="text" placeholder="Search the web or enter an address" spellcheck="false" autocomplete="off">
+        <button class="go-btn" type="submit" title="Go">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+      <div class="suggest-panel" id="suggestPanel"></div>
+    </div>
+
+    <div class="hint-row">
+      <span id="engineHint">Search with Google</span>
+      <span id="hintRow"><kbd>Enter</kbd> to search · <kbd>/</kbd> to focus</span>
+    </div>
+
+    <section class="quick-section" id="quickSection">
+      <div class="quick-title">
+        <span id="quickTitle">Quick links</span>
+        <button id="customizeBtn">Customize MG</button>
+      </div>
+      <div class="quick-grid" id="quickGrid"></div>
+    </section>
+
+    <section class="quick-section" id="recentSection">
+      <div class="quick-title"><span id="recentTitle">Continue browsing</span></div>
+      <div class="recent-row" id="recentRow"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span id="dateLabel"></span>
+    <span class="spacer"></span>
+    <button id="downloadsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg><span id="downloadsLabel">Downloads</span></button>
+    <button id="passwordsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M17 17l2-2M14 20l2-2"/></svg><span id="passwordsLabel">Passwords</span></button>
+    <button id="settingsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span id="settingsLabel">Settings</span></button>
+    <span id="version"></span>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="newtab.js"></script>
+</body>
+</html>

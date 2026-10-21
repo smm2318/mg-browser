@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: file:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <title>Page not available</title>
+  <link rel="stylesheet" href="error.css">
+</head>
+<body>
+  <div class="card">
+    <div class="art">
+      <img src="assets/logo.svg" alt="">
+      <span class="ring"></span>
+    </div>
+    <h1 id="title">This page could not load</h1>
+    <p id="message">Check your connection and try again.</p>
+    <div class="url" id="url"></div>
+    <div class="actions">
+      <button class="btn primary" id="retry">Try again</button>
+      <button class="btn ghost" id="back">Go back</button>
+    </div>
+    <details id="details">
+      <summary>Details</summary>
+      <pre id="detailsText"></pre>
+    </details>
+    <div class="brand">MG Browser</div>
+  </div>
+  <script src="error.js"></script>
+</body>
+</html>

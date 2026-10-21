@@ -1,0 +1,25 @@
+{
+  "name": "mg-browser-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MG Browser — mobile edition (PWA + Capacitor shell)",
+  "scripts": {
+    "serve": "npx http-server www -p 4173 -c-1",
+    "add:android": "npx cap add android",
+    "add:ios": "npx cap add ios",
+    "sync": "npx cap sync",
+    "open:android": "npx cap open android",
+    "open:ios": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/browser": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}

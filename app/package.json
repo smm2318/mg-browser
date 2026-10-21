@@ -1,0 +1,71 @@
+{
+  "name": "mg-browser",
+  "productName": "MG Browser",
+  "version": "1.0.0",
+  "description": "MG Browser — a modern, fast, privacy-friendly web browser with split view, live search, password vault and a custom devtools panel.",
+  "main": "src/main/main.js",
+  "author": {
+    "name": "MG Browser",
+    "email": "hello@mgbrowser.app"
+  },
+  "license": "MIT",
+  "homepage": "https://mgbrowser.app",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --publish never",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:linux": "electron-builder --linux --publish never"
+  },
+  "devDependencies": {
+    "electron": "44.7.0",
+    "electron-builder": "^26.0.12",
+    "rcedit": "^4.0.1"
+  },
+  "build": {
+    "appId": "app.mgbrowser",
+    "productName": "MG Browser",
+    "copyright": "Copyright © 2026 MG Browser",
+    "directories": {
+      "output": "../release/builder",
+      "buildResources": "assets"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "zip", "arch": ["x64"] }
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MG Browser",
+      "artifactName": "MG-Browser-Setup-${version}.${ext}"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.productivity",
+      "darkModeSupport": true,
+      "hardenedRuntime": true
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "assets/icon.png",
+      "category": "Network",
+      "maintainer": "MG Browser <hello@mgbrowser.app>",
+      "synopsis": "Modern browser with split view and live search",
+      "artifactName": "MG-Browser-${version}-${arch}.${ext}"
+    }
+  }
+}

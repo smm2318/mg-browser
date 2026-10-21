@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https: file:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; font-src 'self' data:;">
+  <title>MG Browser</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-forward" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-reload" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-split" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M12 4v16"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M17 17l2-2M14 20l2-2"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 7.5-2"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1-5.4-3-5.4 3 1.1-6.1L3.2 9.9l6.1-.8z"/></symbol>
+  <symbol id="i-star-filled" viewBox="0 0 24 24"><path d="M12 3.5l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1-5.4-3-5.4 3 1.1-6.1L3.2 9.9l6.1-.8z" fill="currentColor"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="3"/><path d="M15 5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6.2 0 10 6 10 6a17 17 0 0 1-3.2 3.9M6.5 7.5A17.6 17.6 0 0 0 2 12s3.8 6 10 6a9.6 9.6 0 0 0 4-1"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17.2v.2"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.2"/></symbol>
+  <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.7 4.6L18 9.3l-4.3 1.7L12 16l-1.7-5L6 9.3l4.3-1.7z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.7 0 2.5-1.1 2.5-2.3 0-.7-.3-1.3-.7-1.8-.3-.5-.6-1-.6-1.6 0-1.2 1-2.2 2.2-2.2H18a3.8 3.8 0 0 0 3-3.8C21 5.7 17 3 12 3z"/><circle cx="7.5" cy="10.5" r="1.1" fill="currentColor"/><circle cx="10" cy="6.8" r="1.1" fill="currentColor"/><circle cx="14.5" cy="6.8" r="1.1" fill="currentColor"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-language" viewBox="0 0 24 24"><path d="M3 5h10M8 3v2M5 5c0 5 3 8 8 9"/><path d="M11 21l4.5-11L20 21M13 17h5"/></symbol>
+  <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="3"/><path d="M6 10v.2M9.5 10v.2M13 10v.2M16.5 10v.2M6 14h12"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M4 6v.2M4 12v.2M4 18v.2"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h9M17 18h3"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="15" cy="18" r="2"/></symbol>
+  <symbol id="i-history" viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1L3 9"/><path d="M3 4v5h5M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></symbol>
+  <symbol id="i-minimize" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-maximize" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1"/></symbol>
+  <symbol id="i-restore" viewBox="0 0 24 24"><rect x="4" y="8" width="12" height="12" rx="1"/><path d="M8 8V4h12v12h-4"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 9l3 3-3 3M13 15h4"/></symbol>
+  <symbol id="i-network" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+  <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 8.5a5 5 0 0 1 0 7M19 6a9 9 0 0 1 0 12"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9 3h6l-1 6 4 4H6l4-4z"/><path d="M12 13v8"/></symbol>
+  <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M8.5 8.5A13 13 0 0 1 21 10M3 10a13 13 0 0 1 2.5-1.5M6 14a10 10 0 0 1 3-1.4M10 17.5a4 4 0 0 1 4 0M12 21h.01"/></symbol>
+</svg>
+
+<div id="app" class="platform-unknown">
+  <header id="header">
+    <div id="titlebar">
+      <div class="titlebar-brand">
+        <img src="assets/logo.svg" alt="" class="brand-logo">
+        <span class="brand-name">MG<span class="brand-dot">.</span></span>
+      </div>
+      <div class="titlebar-drag"></div>
+      <div class="window-controls" id="windowControls">
+        <button class="win-btn" data-win="minimize" title="Minimize"><svg class="icon"><use href="#i-minimize"></use></svg></button>
+        <button class="win-btn" data-win="maximize" title="Maximize"><svg class="icon" id="maximizeIcon"><use href="#i-maximize"></use></svg></button>
+        <button class="win-btn danger" data-win="close" title="Close"><svg class="icon"><use href="#i-close"></use></svg></button>
+      </div>
+    </div>
+
+    <div id="tabstrip">
+      <div id="tabs" class="tabs"></div>
+      <button id="newTabBtn" class="new-tab-btn" title="" data-i18n-title="toolbar.newTab">
+        <svg class="icon"><use href="#i-plus"></use></svg>
+      </button>
+      <div class="tabstrip-spacer"></div>
+      <button class="tabstrip-tool" id="tabSearchBtn" title="Tab search">
+        <svg class="icon"><use href="#i-search"></use></svg>
+      </button>
+    </div>
+
+    <div id="toolbar">
+      <div class="nav-group">
+        <button class="tool-btn" data-nav="back" title="" data-i18n-title="toolbar.back"><svg class="icon"><use href="#i-back"></use></svg></button>
+        <button class="tool-btn" data-nav="forward" title="" data-i18n-title="toolbar.forward"><svg class="icon"><use href="#i-forward"></use></svg></button>
+        <button class="tool-btn" data-nav="reload" id="reloadBtn" title="" data-i18n-title="toolbar.reload"><svg class="icon"><use href="#i-reload"></use></svg></button>
+        <button class="tool-btn" data-nav="home" title="" data-i18n-title="toolbar.home"><svg class="icon"><use href="#i-home"></use></svg></button>
+      </div>
+
+      <form id="omniboxForm" class="omnibox" autocomplete="off" spellcheck="false">
+        <span class="site-badge" id="siteBadge"><svg class="icon"><use href="#i-globe"></use></svg></span>
+        <input id="omnibox" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="">
+        <span class="omni-divider"></span>
+        <button type="button" id="bookmarkBtn" class="omni-btn" title="" data-i18n-title="toolbar.bookmark">
+          <svg class="icon"><use href="#i-star"></use></svg>
+        </button>
+        <button type="button" id="engineBtn" class="engine-btn" title="" data-i18n-title="omni.switchEngine">
+          <span class="engine-glyph" id="engineGlyph">G</span>
+          <svg class="icon engine-caret"><use href="#i-chevron-down"></use></svg>
+        </button>
+      </form>
+
+      <div class="toolbar-actions">
+        <button class="tool-btn" id="splitBtn" title="" data-i18n-title="toolbar.split"><svg class="icon"><use href="#i-split"></use></svg></button>
+        <button class="tool-btn" id="downloadsBtn" title="" data-i18n-title="common.downloads">
+          <svg class="icon"><use href="#i-download"></use></svg>
+          <span class="badge hidden" id="downloadsBadge">0</span>
+        </button>
+        <button class="tool-btn" id="passwordsBtn" title="" data-i18n-title="common.passwords"><svg class="icon"><use href="#i-key"></use></svg></button>
+        <button class="tool-btn" id="devtoolsBtn" title="" data-i18n-title="toolbar.devtools"><svg class="icon"><use href="#i-terminal"></use></svg></button>
+        <button class="avatar-btn" id="avatarBtn" title="" data-i18n-title="toolbar.profile">
+          <span class="avatar-inner" id="avatarInner">
+            <img class="avatar-img hidden" id="avatarImg" alt="">
+            <span class="avatar-fallback" id="avatarFallback">MG</span>
+            <span class="avatar-ring"></span>
+          </span>
+        </button>
+        <button class="tool-btn menu-btn" id="menuBtn" title="" data-i18n-title="toolbar.menu"><svg class="icon"><use href="#i-menu"></use></svg></button>
+      </div>
+    </div>
+
+    <div id="findbar" class="hidden">
+      <svg class="icon find-icon"><use href="#i-search"></use></svg>
+      <input id="findInput" type="text" placeholder="Find in page">
+      <span class="find-count" id="findCount">0/0</span>
+      <button class="tool-btn small" id="findPrev" title="Previous"><svg class="icon"><use href="#i-chevron-left"></use></svg></button>
+      <button class="tool-btn small" id="findNext" title="Next"><svg class="icon"><use href="#i-chevron-right"></use></svg></button>
+      <button class="tool-btn small" id="findClose" title="Close"><svg class="icon"><use href="#i-close"></use></svg></button>
+    </div>
+
+    <div id="omniPanel" class="omni-panel hidden"></div>
+    <div id="savebar" class="savebar hidden"></div>
+
+    <div id="splitbar" class="splitbar hidden">
+      <div class="split-pane-info" id="splitLeftInfo"></div>
+      <div class="split-center">
+        <button class="tool-btn small" id="splitSwapBtn" title=""><svg class="icon"><use href="#i-swap"></use></svg></button>
+        <button class="tool-btn small" id="splitCloseBtn" title=""><svg class="icon"><use href="#i-close"></use></svg></button>
+      </div>
+      <div class="split-pane-info right" id="splitRightInfo"></div>
+    </div>
+
+    <div id="progress" class="progress hidden"><span id="progressBar"></span></div>
+  </header>
+
+  <aside id="sidebar" class="sidebar hidden"></aside>
+  <section id="devtoolsPanel" class="devtools-panel hidden"></section>
+  <section id="settingsOverlay" class="settings-overlay hidden"></section>
+  <div id="splitDivider" class="split-divider hidden"><span></span></div>
+  <div id="toastHost" class="toast-host"></div>
+</div>
+
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+<script src="js/omnibox.js"></script>
+<script src="js/panels.js"></script>
+<script src="js/devtools-ui.js"></script>
+<script src="js/settings-ui.js"></script>
+</body>
+</html>

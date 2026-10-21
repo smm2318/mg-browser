@@ -1,0 +1,13 @@
+﻿node_modules/
+dist/
+release/
+.userdata/
+.demo-downloads/
+.mg-temp/
+.shots/
+shots*/
+.chrome-prof*/
+*.log
+*.bak
+.DS_Store
+Thumbs.db

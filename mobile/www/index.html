@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <meta name="theme-color" content="#0a0b10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="MG Browser mobile — search, tabs, encrypted password vault and a modern start page.">
+  <title>MG Browser</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></symbol>
+  <symbol id="i-tabs" viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="13" rx="2.5"/><path d="M7 7V4h14v13h-4"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M17 17l2-2M14 20l2-2"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="3"/><path d="M15 5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6.2 0 10 6 10 6a17 17 0 0 1-3.2 3.9M6.5 7.5A17.6 17.6 0 0 0 2 12s3.8 6 10 6a9.6 9.6 0 0 0 4-1"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 7.5-2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.7 4.6L18 9.3l-4.3 1.7L12 16l-1.7-5L6 9.3l4.3-1.7z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 20V8"/><path d="M7 13l5-5 5 5"/><path d="M4 4h16"/></symbol>
+</svg>
+
+<div id="app">
+  <header class="appbar">
+    <img src="icons/icon-192.png" alt="" class="appbar-logo">
+    <div class="appbar-title">MG<span>.</span></div>
+    <div class="appbar-spacer"></div>
+    <button class="icon-btn" id="avatarBtn" aria-label="Profile">
+      <span class="avatar" id="avatar"><span id="avatarText">MG</span></span>
+    </button>
+  </header>
+
+  <main id="content">
+    <!-- HOME -->
+    <section class="view active" data-view="home">
+      <div class="hero">
+        <div class="greeting" id="greeting">Good evening</div>
+        <div class="subtitle" id="homeSubtitle">Where would you like to go?</div>
+      </div>
+      <div class="search-wrap">
+        <form id="searchForm" class="search">
+          <button type="button" class="engine-chip" id="engineBtn" aria-label="Search engine">
+            <span class="engine-glyph" id="engineGlyph">G</span>
+            <svg class="icon tiny"><use href="#i-chevron"></use></svg>
+          </button>
+          <input id="q" type="search" placeholder="Search the web or enter an address" autocomplete="off" spellcheck="false">
+          <button type="submit" class="go-btn" aria-label="Go"><svg class="icon"><use href="#i-arrow-right"></use></svg></button>
+        </form>
+        <div id="suggestPanel" class="suggest-panel hidden"></div>
+        <div class="engine-hint" id="engineHint">Search with Google</div>
+      </div>
+
+      <div class="section-head"><span id="quickTitle">Quick links</span><button class="text-btn" id="customizeBtn">Customize</button></div>
+      <div class="quick-grid" id="quickGrid"></div>
+
+      <div class="section-head"><span id="featuresTitle">Why MG</span></div>
+      <div class="feature-grid">
+        <button class="feature" data-feature="vault">
+          <svg class="icon"><use href="#i-shield"></use></svg>
+          <b id="featureVault">Encrypted vault</b>
+          <span id="featureVaultSub">AES-256, only on your device</span>
+        </button>
+        <button class="feature" data-feature="engines">
+          <svg class="icon"><use href="#i-search"></use></svg>
+          <b id="featureEngines">9 search engines</b>
+          <span id="featureEnginesSub">Google to Perplexity, plus Wikipedia</span>
+        </button>
+        <button class="feature wide" data-feature="privacy">
+          <svg class="icon"><use href="#i-sparkles"></use></svg>
+          <span class="feature-wide-text"><b id="featurePrivacy">Private by design</b><span id="featurePrivacySub">No account, no tracking, no clutter.</span></span>
+        </button>
+      </div>
+
+      <div class="section-head" id="recentHead"><span id="recentTitle">Recent</span><button class="text-btn" id="clearRecent">Clear</button></div>
+      <div class="list" id="recentList"></div>
+    </section>
+
+    <!-- TABS -->
+    <section class="view" data-view="tabs">
+      <div class="view-head">
+        <h1 id="tabsTitle">Tabs</h1>
+        <span class="pill" id="tabsCount">0</span>
+      </div>
+      <form id="tabForm" class="add-row">
+        <input id="tabUrl" type="text" placeholder="Paste a link or search…" autocomplete="off">
+        <button class="icon-btn primary" type="submit"><svg class="icon"><use href="#i-plus"></use></svg></button>
+      </form>
+      <div class="list" id="tabsList"></div>
+      <div class="empty-state hidden" id="tabsEmpty">
+        <div class="empty-art"><svg class="icon"><use href="#i-tabs"></use></svg></div>
+        <div class="empty-title">No open tabs</div>
+        <div class="empty-hint">Search or paste a link to start browsing. Tabs are saved on this device.</div>
+      </div>
+      <div class="note">
+        <svg class="icon"><use href="#i-shield"></use></svg>
+        <span id="tabsNote">Pages open in your device's secure browser. Your tab list stays in MG.</span>
+      </div>
+    </section>
+
+    <!-- VAULT -->
+    <section class="view" data-view="vault">
+      <div class="view-head">
+        <h1 id="vaultTitle">Password vault</h1>
+        <span class="pill" id="vaultCount">0</span>
+      </div>
+
+      <div id="vaultLocked" class="lock-screen">
+        <div class="lock-art"><svg class="icon"><use href="#i-lock"></use></svg></div>
+        <div class="lock-title" id="lockTitle">Unlock your vault</div>
+        <div class="lock-hint" id="lockHint">Your passwords are encrypted with AES-256 on this device.</div>
+        <input id="masterPass" class="input" type="password" placeholder="Master password" autocomplete="current-password">
+        <input id="masterPass2" class="input hidden" type="password" placeholder="Confirm master password" autocomplete="new-password">
+        <button class="btn primary wide" id="unlockBtn">Unlock</button>
+        <div class="lock-error hidden" id="lockError">Wrong password. Try again.</div>
+      </div>
+
+      <div id="vaultUnlocked" class="hidden">
+        <div class="vault-toolbar">
+          <div class="search-mini"><svg class="icon"><use href="#i-search"></use></svg><input id="vaultSearch" placeholder="Search vault…"></div>
+          <button class="icon-btn" id="lockBtn" title="Lock vault"><svg class="icon"><use href="#i-lock"></use></svg></button>
+          <button class="icon-btn primary" id="addPwBtn" title="Add password"><svg class="icon"><use href="#i-plus"></use></svg></button>
+        </div>
+        <div id="addPwForm" class="add-form hidden">
+          <input id="pwSite" class="input" placeholder="Website (example.com)">
+          <input id="pwUser" class="input" placeholder="Username or email">
+          <div class="pw-row">
+            <input id="pwPass" class="input" placeholder="Password">
+            <button class="icon-btn" id="genPw" type="button" title="Generate"><svg class="icon"><use href="#i-sparkles"></use></svg></button>
+          </div>
+          <div class="strength" id="pwStrength" data-level="0"><i></i><i></i><i></i><i></i></div>
+          <div class="add-actions">
+            <button class="btn ghost" id="cancelAddPw">Cancel</button>
+            <button class="btn primary" id="savePw">Save password</button>
+          </div>
+        </div>
+        <div class="list" id="vaultList"></div>
+        <div class="empty-state hidden" id="vaultEmpty">
+          <div class="empty-art"><svg class="icon"><use href="#i-key"></use></svg></div>
+          <div class="empty-title">Your vault is empty</div>
+          <div class="empty-hint">Save a password and it will be encrypted with your master password.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view" data-view="settings">
+      <div class="view-head"><h1 id="settingsTitle">Settings</h1></div>
+
+      <div class="section-head"><span id="appearanceTitle">Appearance</span></div>
+      <div class="card">
+        <div class="segmented" id="themeSeg">
+          <button data-theme="light"><svg class="icon"><use href="#i-sun"></use></svg><span>Light</span></button>
+          <button data-theme="dark"><svg class="icon"><use href="#i-moon"></use></svg><span>Dark</span></button>
+          <button data-theme="system"><svg class="icon"><use href="#i-monitor"></use></svg><span>System</span></button>
+        </div>
+        <div class="row-label" id="accentLabel">Accent color</div>
+        <div class="swatches" id="swatches"></div>
+      </div>
+
+      <div class="section-head"><span id="languageTitle">Language</span></div>
+      <div class="card">
+        <div class="segmented" id="langSeg">
+          <button data-lang="en">English</button>
+          <button data-lang="fa">فارسی</button>
+        </div>
+      </div>
+
+      <div class="section-head"><span id="engineTitle">Search engine</span></div>
+      <div class="card engine-cards" id="engineCards"></div>
+
+      <div class="section-head"><span id="profileTitle">Profile</span></div>
+      <div class="card profile-card">
+        <span class="avatar big" id="profileAvatar"><span id="profileText">MG</span></span>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">Local profile</div>
+          <div class="profile-sub" id="profileSub">Tap to add a photo</div>
+        </div>
+        <input type="file" id="avatarInput" accept="image/*" class="hidden">
+        <button class="btn ghost" id="pickAvatar"><svg class="icon"><use href="#i-upload"></use></svg><span id="pickAvatarLabel">Choose</span></button>
+      </div>
+
+      <div class="section-head"><span id="dataTitle">Data</span></div>
+      <div class="card">
+        <button class="setting-row" id="clearTabsBtn"><span id="clearTabsLabel">Close all tabs</span><span class="chev">›</span></button>
+        <button class="setting-row" id="clearHistoryBtn"><span id="clearHistoryLabel">Clear recent history</span><span class="chev">›</span></button>
+        <button class="setting-row danger" id="clearVaultBtn"><span id="clearVaultLabel">Delete password vault</span><span class="chev">›</span></button>
+      </div>
+
+      <div class="section-head"><span id="aboutTitle">About</span></div>
+      <div class="card about-card">
+        <img src="icons/icon-192.png" alt="">
+        <div>
+          <div class="about-name">MG Browser</div>
+          <div class="about-sub" id="aboutSub">Mobile edition · v1.0.0</div>
+          <div class="about-desc" id="aboutDesc">A modern browser shell with search, tabs and an encrypted password vault.</div>
+        </div>
+      </div>
+      <button class="btn primary wide" id="installBtn">Install MG Mobile</button>
+      <div class="version">MG Browser · Made with care</div>
+    </section>
+  </main>
+
+  <nav class="tabbar" id="tabbar">
+    <button class="tabbar-item active" data-nav="home"><svg class="icon"><use href="#i-home"></use></svg><span>Home</span></button>
+    <button class="tabbar-item" data-nav="tabs"><svg class="icon"><use href="#i-tabs"></use></svg><span>Tabs</span><i class="nav-badge hidden" id="tabsBadge">0</i></button>
+    <button class="tabbar-item" data-nav="vault"><svg class="icon"><use href="#i-key"></use></svg><span>Vault</span></button>
+    <button class="tabbar-item" data-nav="settings"><svg class="icon"><use href="#i-settings"></use></svg><span>Settings</span></button>
+  </nav>
+
+  <div id="toastHost" class="toast-host"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
