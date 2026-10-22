@@ -141,3 +141,10 @@ pre {
 .brand { margin-top: 22px; font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-3); }
 .url { direction: ltr; unicode-bidi: plaintext; text-align: center; }
 #detailsText { direction: ltr; text-align: left; }
+
+@font-face { font-family: "Vazirmatn"; src: url("assets/fonts/Vazirmatn-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Vazirmatn"; src: url("assets/fonts/Vazirmatn-Bold.woff2") format("woff2"); font-weight: 700 800; font-display: swap; }
+[dir="rtl"] body, [dir="rtl"] button { font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif; }
+[dir="rtl"] body { line-height: 1.75; }
+p, .url, summary { line-height: 1.75; }
+h1 { line-height: 1.5; }

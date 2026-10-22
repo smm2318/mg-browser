@@ -666,3 +666,32 @@ button { cursor: pointer; }
 .tabbar { background: color-mix(in srgb, var(--bg) 93%, transparent); }
 
 .tabbar { background: color-mix(in srgb, var(--bg) 97%, transparent); }
+
+@font-face { font-family: "Vazirmatn"; src: url("fonts/Vazirmatn-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Vazirmatn"; src: url("fonts/Vazirmatn-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Vazirmatn"; src: url("fonts/Vazirmatn-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Vazirmatn"; src: url("fonts/Vazirmatn-Bold.woff2") format("woff2"); font-weight: 700 800; font-display: swap; }
+
+[dir="rtl"] body,
+[dir="rtl"] input,
+[dir="rtl"] button,
+[dir="rtl"] .segmented button { font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif; }
+[dir="rtl"] body { line-height: 1.7; }
+.greeting { line-height: 1.2; padding-bottom: 3px; }
+[dir="rtl"] .greeting { line-height: 1.45; }
+[dir="rtl"] .subtitle,
+[dir="rtl"] .item-title,
+[dir="rtl"] .item-sub,
+[dir="rtl"] .suggestion,
+[dir="rtl"] .answer-text,
+[dir="rtl"] .feature b,
+[dir="rtl"] .feature > span,
+[dir="rtl"] .lock-hint,
+[dir="rtl"] .segmented button,
+[dir="rtl"] .tabbar-item,
+[dir="rtl"] .setting-row { line-height: 1.7; }
+#q, .input, .add-row input { line-height: 1.6; }
+
+/* gradient headlines need padding so Persian descenders are not clipped */
+.greeting { padding: 6px 0 6px; margin-top: -4px; }
+[dir="rtl"] .greeting { line-height: 1.5; padding-top: 8px; padding-bottom: 10px; }

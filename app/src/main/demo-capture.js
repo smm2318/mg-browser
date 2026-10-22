@@ -8,12 +8,13 @@ const { desktopCapturer, screen } = require('electron');
  * Captures the real, composited window (chrome UI + embedded page views)
  * using the OS screen capture pipeline, cropped to the window rectangle.
  */
-async function captureWindow(win, file) {
+async function captureWindow(win, file, options = {}) {
   if (!win || win.isDestroyed()) return null;
   try {
-    win.show();
-    win.moveTop();
-    win.focus();
+    if (!options.noActivate) {
+      win.show();
+      win.moveTop();
+    }
     await delay(420);
 
     const bounds = win.getBounds();

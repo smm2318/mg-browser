@@ -34,6 +34,8 @@
     historyItems: [],
     historyLoaded: false,
     passwordCount: 0,
+    extensionItems: [],
+    extensionsLoaded: false,
     generatorValue: '',
 
     init() {
@@ -61,6 +63,7 @@
         { id: 'privacy', icon: 'shield', label: MG.t('settings.privacy') },
         { id: 'downloads', icon: 'download', label: MG.t('settings.downloads') },
         { id: 'passwords', icon: 'key', label: MG.t('settings.passwords') },
+        { id: 'extensions', icon: 'puzzle', label: MG.t('settings.extensions') },
         { id: 'languages', icon: 'language', label: MG.t('settings.languages') },
         { id: 'contextmenu', icon: 'list', label: MG.t('settings.contextmenu') },
         { id: 'shortcuts', icon: 'keyboard', label: MG.t('settings.shortcuts') },
@@ -100,6 +103,7 @@
         case 'privacy': return this.renderPrivacy();
         case 'downloads': return this.renderDownloads();
         case 'passwords': return this.renderPasswords();
+        case 'extensions': return this.renderExtensions();
         case 'languages': return this.renderLanguages();
         case 'contextmenu': return this.renderContextMenu();
         case 'shortcuts': return this.renderShortcuts();
@@ -251,6 +255,44 @@
             </div>
             <button class="btn" data-settings-action="gen-generate">${MG.icon('sparkles')}${MG.esc(MG.t('passwords.generate'))}</button>
           </div>
+        </div>`;
+    },
+
+    renderExtensions() {
+      const exts = this.extensionItems || [];
+      const rows = exts.map((ext) => {
+        const initial = MG.esc((ext.name || 'E').trim().charAt(0).toUpperCase());
+        return `<div class="ext-item ${ext.enabled === false ? 'disabled' : ''}">
+          <div class="ext-icon">${initial}</div>
+          <div class="ext-main">
+            <div class="ext-name">${MG.esc(ext.name || ext.path)}
+              ${ext.version ? `<span class="ext-version">v${MG.esc(ext.version)}</span>` : ''}
+              ${ext.error ? `<span class="ext-error">${MG.esc(MG.t('settings.extensionsError'))}</span>` : ''}
+            </div>
+            <div class="ext-path" title="${MG.esc(ext.path)}">${MG.esc(ext.path)}</div>
+            ${ext.error ? `<div class="ext-error-text">${MG.esc(ext.error)}</div>` : ''}
+          </div>
+          <div class="ext-actions">
+            <button class="switch ${ext.enabled !== false ? 'on' : ''}" data-ext-toggle="${MG.esc(ext.id || ext.path)}" title="${MG.esc(ext.enabled !== false ? MG.t('settings.extensionsEnabled') : MG.t('settings.extensionsDisabled'))}"></button>
+            <button class="tool-btn small" data-ext-action="reload" data-ext-id="${MG.esc(ext.id || ext.path)}" title="${MG.esc(MG.t('settings.extensionsReload'))}">${MG.icon('reload')}</button>
+            <button class="tool-btn small" data-ext-action="folder" data-ext-id="${MG.esc(ext.id || ext.path)}" title="${MG.esc(MG.t('settings.extensionsFolder'))}">${MG.icon('folder')}</button>
+            <button class="tool-btn small" data-ext-action="remove" data-ext-id="${MG.esc(ext.id || ext.path)}" title="${MG.esc(MG.t('settings.extensionsRemove'))}">${MG.icon('trash')}</button>
+          </div>
+        </div>`;
+      }).join('');
+
+      return `
+        <div class="settings-section-title">${MG.esc(MG.t('settings.extensions'))}</div>
+        <div class="card">
+          <div class="row" style="display:block">
+            <div class="row-hint">${MG.esc(MG.t('settings.extensionsHint'))}</div>
+            <div class="ext-toolbar">
+              <button class="btn primary" data-settings-action="add-extension">${MG.icon('plus')}${MG.esc(MG.t('settings.extensionsAdd'))}</button>
+              <button class="btn" data-settings-action="reload-tabs">${MG.icon('reload')}${MG.esc(MG.t('settings.extensionsReloadTabs'))}</button>
+            </div>
+          </div>
+          ${exts.length ? `<div class="ext-list">${rows}</div>` : `<div class="settings-empty">${MG.esc(MG.t('settings.extensionsEmpty'))}<div class="row-hint" style="margin-top:5px">${MG.esc(MG.t('settings.extensionsEmptyHint'))}</div></div>`}
+          <div class="ext-warning">${MG.icon('shield')}<span>${MG.esc(MG.t('settings.extensionsWarning'))}</span></div>
         </div>`;
     },
 
@@ -408,6 +450,12 @@
         this.passwordCount = Array.isArray(list) ? list.length : 0;
         this.render();
       }
+      if (this.section === 'extensions') {
+        const list = await MG.call('extensions:list');
+        this.extensionItems = Array.isArray(list) ? list : [];
+        this.extensionsLoaded = true;
+        this.render();
+      }
     },
 
     async setSetting(key, value) {
@@ -434,6 +482,37 @@
         this.section = section.dataset.section;
         this.render();
         this.loadSectionData();
+        return;
+      }
+
+      const extToggle = event.target.closest('[data-ext-toggle]');
+      if (extToggle) {
+        const id = extToggle.dataset.extToggle;
+        const ext = (this.extensionItems || []).find((e) => (e.id || e.path) === id);
+        if (!ext) return;
+        const list = await MG.call('extensions:toggle', { id, enabled: ext.enabled === false });
+        this.extensionItems = Array.isArray(list) ? list : await MG.call('extensions:list');
+        this.render();
+        return;
+      }
+
+      const extAction = event.target.closest('[data-ext-action]');
+      if (extAction) {
+        const id = extAction.dataset.extId;
+        const action = extAction.dataset.extAction;
+        if (action === 'folder') {
+          await MG.call('extensions:openFolder', { id });
+        } else if (action === 'remove') {
+          if (!confirm(MG.t('settings.extensionsRemove') + '?')) return;
+          await MG.call('extensions:remove', { id });
+          this.extensionItems = await MG.call('extensions:list');
+          this.render();
+          MG.toast(MG.t('settings.extensionsRemoved'), 'success', 1600);
+        } else if (action === 'reload') {
+          const list = await MG.call('extensions:reload', { id });
+          this.extensionItems = Array.isArray(list) ? list : await MG.call('extensions:list');
+          this.render();
+        }
         return;
       }
       const theme = event.target.closest('[data-theme-set]');
@@ -524,6 +603,21 @@
         case 'open-vault':
           MG.closeSettings();
           MG.openSidebar('passwords');
+          break;
+        case 'add-extension': {
+          const result = await MG.call('extensions:add');
+          if (result && result.ok) {
+            this.extensionItems = result.extensions || await MG.call('extensions:list');
+            this.render();
+            MG.toast(MG.t('settings.extensionsAdded') + ' — ' + MG.t('settings.extensionsRestart'), 'success', 3200);
+          } else if (result && !result.canceled) {
+            MG.toast(result.error || MG.t('settings.extensionsError'), 'error', 4200);
+          }
+          break;
+        }
+        case 'reload-tabs':
+          await MG.call('extensions:reloadTabs');
+          MG.toast(MG.t('settings.extensionsReloadTabs'), 'success', 1600);
           break;
         case 'add-action': {
           const label = ($('actionLabel') || {}).value || '';

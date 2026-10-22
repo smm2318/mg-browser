@@ -391,3 +391,28 @@ h1 {
 
 .hidden { display: none !important; }
 
+
+@font-face { font-family: "Vazirmatn"; src: url("assets/fonts/Vazirmatn-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Vazirmatn"; src: url("assets/fonts/Vazirmatn-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Vazirmatn"; src: url("assets/fonts/Vazirmatn-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Vazirmatn"; src: url("assets/fonts/Vazirmatn-Bold.woff2") format("woff2"); font-weight: 700 800; font-display: swap; }
+
+[dir="rtl"] body,
+[dir="rtl"] input,
+[dir="rtl"] button { font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif; }
+[dir="rtl"] body { line-height: 1.7; }
+.greeting { line-height: 1.2; padding-bottom: 4px; }
+[dir="rtl"] .greeting { line-height: 1.45; padding-bottom: 2px; }
+.subtitle { line-height: 1.7; }
+[dir="rtl"] .quick span,
+[dir="rtl"] .recent-chip,
+[dir="rtl"] .suggestion,
+[dir="rtl"] .answer-title,
+[dir="rtl"] .answer-text,
+[dir="rtl"] .hint-row { line-height: 1.7; }
+#q { line-height: 1.6; }
+.hint-row kbd, .suggestion .src { line-height: 1.5; }
+
+/* gradient headlines need padding so Persian descenders are not clipped */
+.greeting { padding: 6px 0 6px; margin-top: -4px; }
+[dir="rtl"] .greeting { line-height: 1.5; padding-top: 8px; padding-bottom: 10px; }

@@ -65,6 +65,7 @@ const DEFAULTS = {
   history: [],
   bookmarks: [],
   session: { tabs: [], activeId: null, split: null },
+  extensions: [],
   knownOrigins: [],
   dismissedSites: []
 };

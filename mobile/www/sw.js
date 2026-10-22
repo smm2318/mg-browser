@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE = 'mg-mobile-v1';
+const CACHE = 'mg-mobile-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -10,7 +10,11 @@ const ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/maskable-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './fonts/Vazirmatn-Regular.woff2',
+  './fonts/Vazirmatn-Medium.woff2',
+  './fonts/Vazirmatn-SemiBold.woff2',
+  './fonts/Vazirmatn-Bold.woff2'
 ];
 
 self.addEventListener('install', (event) => {

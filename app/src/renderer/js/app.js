@@ -277,7 +277,7 @@
     if (favHost.dataset.key !== favKey) {
       favHost.dataset.key = favKey;
       favHost.innerHTML = MG.faviconHtml(tab);
-      if (tab.loading) {
+      if (tab.loading && !tab.isNewTab && !/newtab\.html/i.test(tab.url || '')) {
         const spinner = document.createElement('span');
         spinner.className = 'tab-spinner';
         favHost.appendChild(spinner);

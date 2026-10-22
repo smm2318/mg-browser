@@ -14,6 +14,7 @@ const { Store } = require('./store');
 const { PasswordVault } = require('./passwords');
 const { DownloadManager } = require('./downloads');
 const { DevtoolsBridge } = require('./devtools');
+const { ContextMenuWindow } = require('./context-menu-window');
 const search = require('./search');
 const menus = require('./context-menu');
 
@@ -21,6 +22,7 @@ const APP_ROOT = path.join(__dirname, '..', '..');
 const RENDERER_DIR = path.join(APP_ROOT, 'src', 'renderer');
 const CHROME_PRELOAD = path.join(APP_ROOT, 'src', 'preload', 'chrome-preload.js');
 const PAGE_PRELOAD = path.join(APP_ROOT, 'src', 'preload', 'page-preload.js');
+const MENU_PRELOAD = path.join(APP_ROOT, 'src', 'preload', 'menu-preload.js');
 const ICON = path.join(APP_ROOT, 'assets', 'icon.png');
 const IS_MAC = process.platform === 'darwin';
 const PARTITION = 'persist:mg';
@@ -45,6 +47,8 @@ let tabSession = null;
 let downloads = null;
 let devtools = null;
 let quitting = false;
+const loadedExtensions = new Map();
+let contextMenuWindow = null;
 
 const state = {
   nextId: 1,
@@ -541,25 +545,7 @@ function wireTab(tab) {
   });
 
   wc.on('context-menu', (event, params) => {
-    if (!win) return;
-    const menu = menus.buildPageMenu({
-      params,
-      tab,
-      settings: store.settings,
-      engines: search.enginesFor(store.settings),
-      searchEngineName: search.engineFor(store.settings).name,
-      actions: {
-        openTab: (url, options = {}) => createTab(url, { active: options.activate !== false }),
-        openSplit: (url) => openSplitWithNewTab(url),
-        searchInNewTab: (query, engineId) => createTab(search.buildSearchUrl(store.settings, query, engineId), { active: true }),
-        goBack: () => goBack(tab.id),
-        goForward: () => goForward(tab.id),
-        reload: () => reloadTab(tab.id),
-        openDevtoolsPanel: () => toggleDevtools(true),
-        openNativeDevtools: () => openNativeDevtools(tab)
-      }
-    });
-    menu.popup({ window: win });
+    popupPageMenu(tab, params);
   });
 
   wc.on('before-input-event', onShortcut);
@@ -604,6 +590,70 @@ function wireTab(tab) {
   wc.on('update-target-url', (event, url) => {
     send('target-url', { url });
   });
+}
+
+function popupPageMenu(tab, params, position) {
+  if (!win || !tab) return null;
+  const wc = tab.view && !tab.view.webContents.isDestroyed() ? tab.view.webContents : null;
+  const actions = {
+    openTab: (url, options = {}) => createTab(url, { active: options.activate !== false }),
+    openSplit: (url) => openSplitWithNewTab(url),
+    searchInNewTab: (query, engineId) => createTab(search.buildSearchUrl(store.settings, query, engineId), { active: true }),
+    goBack: () => goBack(tab.id),
+    goForward: () => goForward(tab.id),
+    reload: () => reloadTab(tab.id),
+    openDevtoolsPanel: () => toggleDevtools(true),
+    openNativeDevtools: () => openNativeDevtools(tab),
+    openContextSettings: () => send('open-settings', { section: 'contextmenu' })
+  };
+  const spec = menus.buildPageMenuSpec({
+    params,
+    tab,
+    settings: store.settings,
+    engines: search.enginesFor(store.settings),
+    searchEngineName: search.engineFor(store.settings).name,
+    lang: store.settings.language,
+    actions
+  });
+
+  try {
+    if (!contextMenuWindow || contextMenuWindow.parent !== win) {
+      contextMenuWindow = new ContextMenuWindow({
+        parent: win,
+        preload: MENU_PRELOAD,
+        html: path.join(RENDERER_DIR, 'contextmenu.html'),
+        onClose: () => {
+          const active = updateActiveTab();
+          if (active) {
+            try { active.view.webContents.focus(); } catch { /* ignore */ }
+          }
+        }
+      });
+    }
+    contextMenuWindow.open({
+      items: spec.items,
+      actions: spec.actions,
+      theme: effectiveTheme(),
+      lang: store.settings.language,
+      accent: store.settings.accent,
+      position
+    }).catch((err) => {
+      console.error('[menu] custom menu failed', err.message);
+    });
+  } catch (err) {
+    console.error('[menu]', err);
+    const fallback = menus.buildPageMenu({
+      params,
+      tab,
+      settings: store.settings,
+      engines: search.enginesFor(store.settings),
+      searchEngineName: search.engineFor(store.settings).name,
+      lang: store.settings.language,
+      actions
+    });
+    fallback.popup({ window: win });
+  }
+  return null;
 }
 
 function updateNavState(tab) {
@@ -1081,6 +1131,151 @@ function findTabByWebContents(sender) {
 }
 
 /* ------------------------------------------------------------------ */
+/* extensions                                                          */
+/* ------------------------------------------------------------------ */
+
+function extensionState() {
+  return (store.data.extensions || []).map((ext) => {
+    const loaded = loadedExtensions.get(ext.path);
+    return {
+      path: ext.path,
+      name: loaded ? loaded.name : (ext.name || path.basename(ext.path)),
+      version: loaded ? loaded.version : (ext.version || ''),
+      id: loaded ? loaded.id : (ext.id || ''),
+      enabled: ext.enabled !== false,
+      loaded: !!loaded,
+      error: ext.error || null,
+      addedAt: ext.addedAt || 0
+    };
+  });
+}
+
+async function loadOneExtension(ext) {
+  if (!ext || !ext.path || ext.enabled === false) return false;
+  if (loadedExtensions.has(ext.path)) return true;
+  try {
+    const extensionApi = tabSession.extensions || tabSession;
+    const loaded = await extensionApi.loadExtension(ext.path, { allowFileAccess: true });
+    loadedExtensions.set(ext.path, loaded);
+    ext.id = loaded.id;
+    ext.name = loaded.name || ext.name;
+    ext.version = loaded.version || ext.version;
+    ext.error = null;
+    console.log('[extensions] loaded', ext.name, loaded.id);
+    return true;
+  } catch (err) {
+    ext.error = err.message;
+    console.error('[extensions] failed', ext.path, err.message);
+    return false;
+  }
+}
+
+async function loadInstalledExtensions() {
+  for (const ext of store.data.extensions || []) {
+    if (ext.enabled !== false) await loadOneExtension(ext);
+  }
+  store.save();
+}
+
+async function addExtensionFromPath(dir) {
+  const resolved = path.resolve(String(dir || ''));
+  const manifestPath = path.join(resolved, 'manifest.json');
+  if (!fs.existsSync(manifestPath)) throw new Error('manifest.json پیدا نشد');
+  let manifest;
+  try {
+    manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  } catch (err) {
+    throw new Error('manifest.json معتبر نیست: ' + err.message);
+  }
+  if (!manifest.name) throw new Error('manifest.name وجود ندارد');
+  const existing = (store.data.extensions || []).find((e) => path.resolve(e.path) === resolved);
+  if (existing) throw new Error('این افزونه قبلاً اضافه شده است');
+  const entry = {
+    path: resolved,
+    name: manifest.name,
+    version: manifest.version || '',
+    enabled: true,
+    addedAt: Date.now(),
+    error: null
+  };
+  await loadOneExtension(entry);
+  store.data.extensions = [...(store.data.extensions || []), entry];
+  store.save();
+  return extensionState();
+}
+
+function findStoredExtension(id) {
+  return (store.data.extensions || []).find((e) => e.id === id || e.path === id || path.basename(e.path) === id);
+}
+
+async function chooseExtensionFolder() {
+  if (!win) return { ok: false, error: 'window not ready' };
+  const result = await dialog.showOpenDialog(win, {
+    title: store.settings.language === 'fa' ? 'انتخاب پوشه افزونه (unpacked)' : 'Load unpacked extension',
+    properties: ['openDirectory']
+  });
+  if (result.canceled || !result.filePaths.length) return { ok: false, canceled: true };
+  try {
+    const extensions = await addExtensionFromPath(result.filePaths[0]);
+    return { ok: true, extensions };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+async function removeExtension(id) {
+  const ext = findStoredExtension(id);
+  if (!ext) return false;
+  const loaded = loadedExtensions.get(ext.path);
+  if (loaded) {
+    try { (tabSession.extensions || tabSession).removeExtension(loaded.id); } catch { /* ignore */ }
+    loadedExtensions.delete(ext.path);
+  }
+  store.data.extensions = (store.data.extensions || []).filter((e) => e.path !== ext.path);
+  store.save();
+  return true;
+}
+
+async function toggleExtension(id, enabled) {
+  const ext = findStoredExtension(id);
+  if (!ext) return false;
+  ext.enabled = !!enabled;
+  if (enabled) {
+    await loadOneExtension(ext);
+  } else {
+    const loaded = loadedExtensions.get(ext.path);
+    if (loaded) {
+      try { (tabSession.extensions || tabSession).removeExtension(loaded.id); } catch { /* ignore */ }
+      loadedExtensions.delete(ext.path);
+    }
+  }
+  store.save();
+  return true;
+}
+
+async function reloadExtension(id) {
+  const ext = findStoredExtension(id);
+  if (!ext) return false;
+  const loaded = loadedExtensions.get(ext.path);
+  if (loaded) {
+    try { (tabSession.extensions || tabSession).removeExtension(loaded.id); } catch { /* ignore */ }
+    loadedExtensions.delete(ext.path);
+  }
+  ext.error = null;
+  await loadOneExtension(ext);
+  store.save();
+  return !ext.error;
+}
+
+function reloadTabsForExtensions() {
+  for (const tab of state.tabs.values()) {
+    if (!tab.isNewTab && !tab.showingError && /^https?:/.test(tab.url || '')) {
+      try { tab.view.webContents.reload(); } catch { /* ignore */ }
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* devtools                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -1155,6 +1350,7 @@ function showMainMenu() {
   const tab = updateActiveTab();
   const menu = menus.buildMainMenu({
     settings: store.settings,
+    lang: store.settings.language,
     recentHistory: store.data.history.slice(0, 10),
     isBookmarked: !!(tab && tab.url && store.isBookmarked(tab.url)),
     actions: {
@@ -1182,6 +1378,7 @@ function showTabMenu(tabId) {
   const menu = menus.buildTabMenu({
     tab,
     settings: store.settings,
+    lang: store.settings.language,
     actions: {
       newTab: () => createTab('mg://newtab', { active: true }),
       reloadTab: (id) => reloadTab(id),
@@ -1214,6 +1411,7 @@ function closeTabsToRight(id) {
 function showProfileMenu() {
   const menu = menus.buildProfileMenu({
     profile: store.data.profile,
+    lang: store.settings.language,
     actions: {
       openTab: (url, opts) => createTab(url, { active: !opts || opts.activate !== false }),
       changeAvatar: () => pickAvatar(),
@@ -1684,6 +1882,46 @@ async function dispatch(action, payload = {}) {
       return true;
     }
 
+    case 'extensions:list': return extensionState();
+    case 'extensions:add': {
+      const result = await chooseExtensionFolder();
+      if (result.ok) send('extensions', { extensions: result.extensions });
+      return result;
+    }
+    case 'extensions:addPath': {
+      try {
+        const extensions = await addExtensionFromPath(payload.path);
+        send('extensions', { extensions });
+        return { ok: true, extensions };
+      } catch (err) {
+        return { ok: false, error: err.message };
+      }
+    }
+    case 'extensions:remove': {
+      await removeExtension(payload.id);
+      const extensions = extensionState();
+      send('extensions', { extensions });
+      return extensions;
+    }
+    case 'extensions:toggle': {
+      await toggleExtension(payload.id, payload.enabled);
+      const extensions = extensionState();
+      send('extensions', { extensions });
+      return extensions;
+    }
+    case 'extensions:reload': {
+      await reloadExtension(payload.id);
+      const extensions = extensionState();
+      send('extensions', { extensions });
+      return extensions;
+    }
+    case 'extensions:openFolder': {
+      const ext = findStoredExtension(payload.id);
+      if (ext && ext.path) shell.openPath(ext.path);
+      return true;
+    }
+    case 'extensions:reloadTabs': reloadTabsForExtensions(); return true;
+
     case 'permission:respond': {
       const cb = state.pendingPermissions.get(payload.requestId);
       if (!cb) return false;
@@ -1758,6 +1996,12 @@ function registerIpc() {
     const tab = findTabByWebContents(event.sender);
     if (tab) maybeAutofill(tab);
   });
+  ipcMain.on('menu:pick', (event, id) => {
+    if (contextMenuWindow) contextMenuWindow.pick(id);
+  });
+  ipcMain.on('menu:close', () => {
+    if (contextMenuWindow) contextMenuWindow.close();
+  });
   ipcMain.on('mg:page-crashed', () => {});
 }
 
@@ -1807,6 +2051,7 @@ if (!gotLock) {
     setupPermissions();
     setupDownloads();
     setupDevtools();
+    await loadInstalledExtensions();
     createWindow();
     registerIpc();
 
@@ -1910,6 +2155,41 @@ async function runSelfTest() {
       log('autofill test skipped:', err.message);
     }
 
+    try {
+      const extPath = path.join(APP_ROOT, 'tools', 'test-extension');
+      const added = await dispatch('extensions:addPath', { path: extPath });
+      log('extension add:', !!(added && added.ok), added && added.error ? added.error : '');
+      const extList = await dispatch('extensions:list');
+      log('extension list:', extList.length, 'loaded:', extList[0] && extList[0].loaded, 'error:', extList[0] && extList[0].error);
+      const extTab = createTab('https://example.com', { active: true });
+      await wait(3500);
+      const injected = await extTab.view.webContents.executeJavaScript(
+        `document.documentElement.getAttribute('data-mg-test-extension')`
+      );
+      log('extension content script:', injected);
+      await dispatch('extensions:remove', { id: extPath });
+    } catch (err) {
+      log('extension test failed:', err.message);
+    }
+
+    try {
+      const menuTab = updateActiveTab();
+      popupPageMenu(menuTab, {
+        x: 400, y: 300, linkURL: '', srcURL: '', mediaType: 'none', selectionText: '',
+        misspelledWord: '', dictionarySuggestions: [], isEditable: false,
+        editFlags: { canCopy: true, canPaste: true }
+      }, { x: 500, y: 300 });
+      await wait(900);
+      await contextMenuWindow.win.webContents.executeJavaScript(
+        `document.querySelector('.menu-item:not(:disabled)')?.click()`
+      );
+      await wait(400);
+      log('context menu copy:', clipboard.readText().slice(0, 90));
+      contextMenuWindow.close();
+    } catch (err) {
+      log('context menu test failed:', err.message);
+    }
+
     await dispatch('settings:set', { theme: 'system', language: 'en', searchEngine: 'google' });
     log('SELFTEST PASS');
   } catch (err) {
@@ -1964,7 +2244,15 @@ function runDemoMode() {
     { action: 'close-settings', wait: 500 },
     { action: 'devtools-off', wait: 700 },
     { action: 'newtab', wait: 2200, shot: '10-start-persian.png' },
-    { action: 'browse', arg: 'https://mg-browser-does-not-exist.invalid', wait: 5200, shot: '11-error.png' }
+    { action: 'browse', arg: 'https://mg-browser-does-not-exist.invalid', wait: 5200, shot: '11-error.png' },
+    { action: 'browse', arg: 'https://en.wikipedia.org/wiki/Web_browser', wait: 4800 },
+    { action: 'contextmenu', wait: 1300, shot: '12-contextmenu-fa.png', noActivate: true },
+    { action: 'close-menu', wait: 400 },
+    { action: 'add-extension', wait: 900 },
+    { action: 'settings-extensions', wait: 1500, shot: '13-extensions-fa.png' },
+    { action: 'close-settings', wait: 500 },
+    { action: 'newtab', wait: 1600 },
+    { action: 'size', arg: '1080x720', wait: 1000, shot: '14-persian-narrow.png' }
   ];
 
   const seedDemoVault = () => {
@@ -1986,7 +2274,7 @@ function runDemoMode() {
     try {
       if (step.action) await runDemoAction(step.action, step.arg);
       await new Promise((r) => setTimeout(r, step.wait || 1200));
-      if (step.shot) await captureWindow(win, path.join(dir, step.shot));
+      if (step.shot) await captureWindow(win, path.join(dir, step.shot), { noActivate: !!step.noActivate });
     } catch (err) {
       console.error('[demo] step failed', step, err);
     }
@@ -2065,6 +2353,41 @@ async function runDemoAction(action, arg) {
     }
     case 'devtools-off':
       toggleDevtools(false);
+      break;
+    case 'size': {
+      const [w, h] = String(arg || '1100x740').split('x').map(Number);
+      if (w > 700 && h > 500 && win) {
+        win.setContentSize(w, h);
+        setTimeout(applyLayout, 120);
+      }
+      break;
+    }
+    case 'contextmenu': {
+      const tab = updateActiveTab();
+      if (tab) {
+        popupPageMenu(tab, {
+          x: 600,
+          y: 360,
+          linkURL: '',
+          srcURL: '',
+          mediaType: 'none',
+          selectionText: '',
+          misspelledWord: '',
+          dictionarySuggestions: [],
+          isEditable: false,
+          editFlags: { canCopy: true, canPaste: true, canCut: false, canUndo: false, canRedo: false, canSelectAll: true }
+        }, { x: 620, y: 320 });
+      }
+      break;
+    }
+    case 'close-menu':
+      try { if (contextMenuWindow) contextMenuWindow.close(); } catch { /* ignore */ }
+      break;
+    case 'add-extension':
+      await dispatch('extensions:addPath', { path: path.join(APP_ROOT, 'tools', 'test-extension') });
+      break;
+    case 'settings-extensions':
+      send('open-settings', { section: 'extensions' });
       break;
     case 'theme-dark':
       await dispatch('settings:set', { theme: 'dark' });

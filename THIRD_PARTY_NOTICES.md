@@ -12,6 +12,7 @@ for the full license texts shipped with the application.
 | **Electron** | MIT | `LICENSE.electron.txt` is included in the release folder. |
 | **Chromium** | BSD-3-Clause and other open-source licenses | Full texts: `LICENSES.chromium.html` in the release folder. |
 | **Node.js** | MIT | Bundled inside Electron. |
+| **Vazirmatn** (Persian UI font) | SIL Open Font License 1.1 | Font files are under `app/src/renderer/assets/fonts/` and `mobile/www/fonts/`; the OFL text is included next to them. |
 | **FFmpeg** (`ffmpeg.dll`) | LGPL-2.1-or-later (build dependent) | Electron's official builds include an FFmpeg build; review codec licensing (H.264/AAC) before commercial distribution. |
 | **7-Zip** | LGPL-2.1-or-later | Only the installer-related notices are bundled; see `7zip-installer-*.txt`. |
 

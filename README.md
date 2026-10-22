@@ -9,6 +9,7 @@
 ## فهرست
 
 - [نمای کلی](#نمای-کلی)
+- [سیاست امضای کد](#code-signing-policy)
 - [نسخه‌ها](#نسخهها)
 - [شروع سریع (ویندوز)](#شروع-سریع-ویندوز)
 - [ویژگی‌ها](#ویژگیها)
@@ -25,6 +26,18 @@
 ## نمای کلی
 
 MG Browser یک مرورگر واقعی مبتنی بر Electron و Chromium است: هر تب یک `WebContentsView` واقعی با نشست پایدار، کوکی و ورود به حساب گوگل است. رابط کاربری کاملاً اختصاصی طراحی شده — نه یک پوسته آماده.
+
+## Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+- Authors / committers: [@YOUR_GITHUB_USERNAME](https://github.com/YOUR_GITHUB_USERNAME)
+- Reviewers: [@YOUR_GITHUB_USERNAME](https://github.com/YOUR_GITHUB_USERNAME) — all pull requests are reviewed before merge
+- Approvers: [@YOUR_GITHUB_USERNAME](https://github.com/YOUR_GITHUB_USERNAME) — approves every release before signing
+
+Privacy policy: [docs/PRIVACY.md](docs/PRIVACY.md). MG Browser does not transfer any information to other networked systems unless specifically requested by the user (search, page navigation, downloads) or by the person installing or operating it.
+
+> وضعیت: درخواست SignPath Foundation در حال بررسی است. تا تأیید نشدن، ریلیزها بدون امضا منتشر می‌شوند. جزئیات و برنامه ساخت شهرت: [docs/SIGNPATH.md](docs/SIGNPATH.md).
 
 | نمای تقسیم‌شده | جستجوی زنده |
 | --- | --- |
@@ -120,10 +133,11 @@ powershell -ExecutionPolicy Bypass -File .\Install-MG-Browser.ps1
 
 ### ظاهر، زبان و شخصی‌سازی
 - تم **تیره / روشن / سیستم**، ۹ رنگ تأکیدی، طراحی شیشه‌ای با گوشه‌های نرم و انیمیشن‌های ظریف.
-- **فارسی و انگلیسی**، پیش‌فرض انگلیسی، چیدمان کامل RTL در فارسی.
-- منوی راست‌کلیک کاملاً قابل شخصی‌سازی (۲۲ گزینه + اکشن‌های سفارشی با `%s`).
+- **فارسی و انگلیسی**، پیش‌فرض انگلیسی، چیدمان کامل RTL در فارسی، فونت **وزیرمتن** و تنظیم line-height برای جلوگیری از بریده‌شدن حروف فارسی در همه پلتفرم‌ها.
+- **منوی راست‌کلیک سفارشی** با ظاهر اختصاصی MG (نه منوی پیش‌فرض سیستم)، کاملاً فارسی/انگلیسی و قابل شخصی‌سازی؛ ۲۲ گزینه + اکشن‌های سفارشی با `%s` و دکمه «شخصی‌سازی این منو…».
 - صفحه شروع اختصاصی با ساعت/سلام، جستجو، دسترسی سریع، تاریخچه اخیر و نتایج زنده.
 - **MG DevTools:** کنسول، شبکه، DOM، کوکی‌ها و حافظه — با ظاهر اختصاصی و اتصال CDP؛ دکمه بازکردن DevTools بومی هم موجود است.
+- **سیستم افزونه:** بارگذاری افزونه‌های Chrome به‌صورت unpacked با فعال/غیرفعال، بارگذاری مجدد، نمایش خطا و حذف. راهنما: [docs/EXTENSIONS.md](docs/EXTENSIONS.md).
 - نوار کناری دانلود/رمز، Find in Page، Zoom، Bookmark، تاریخچه، چاپ، View Source.
 
 ---
@@ -245,6 +259,7 @@ npx cap open android       # Android Studio / Xcode
 - بیلد آماده فقط برای **ویندوز x64** در این مخزن قرار دارد (حجم ~۳۶۹ مگابایت). مک/لینوکس باید روی همان سیستم یا CI ساخته شوند.
 - افزونه‌های Chrome پشتیبانی نمی‌شوند (Electron محدودیت دارد).
 - صفحه‌های `chrome://` بومی در دسترس نیستند؛ به‌جای آن MG DevTools و DevTools بومی Electron موجود است.
+- افزونه‌ها فقط به‌صورت **unpacked** و با پشتیبانی محدود Electron از APIهای Chrome بارگذاری می‌شوند؛ نصب از Chrome Web Store و بخشی از APIهای اختصاصی Chrome کار نمی‌کند. نسخه موبایل از افزونه‌ها پشتیبانی نمی‌کند.
 - موبایل: صفحات در مرورگر سیستم باز می‌شوند (توضیح بالا).
 - ورود گوگل ممکن است بسته به سیاست گوگل در مرورگرهای تعبیه‌شده محدود شود؛ User-Agent واقعی کروم برای سازگاری تنظیم شده است.
 
@@ -254,7 +269,11 @@ npx cap open android       # Android Studio / Xcode
 
 - [docs/RELEASE.md](docs/RELEASE.md)
 - [docs/SIGNING.md](docs/SIGNING.md)
+- [docs/SIGNPATH.md](docs/SIGNPATH.md)
 - [docs/PRIVACY.md](docs/PRIVACY.md)
+- [docs/EXTENSIONS.md](docs/EXTENSIONS.md)
+- [SECURITY.md](SECURITY.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md)
 - [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
 - [.github/workflows/release.yml](.github/workflows/release.yml)
 

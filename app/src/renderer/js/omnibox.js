@@ -90,6 +90,10 @@
         }
       });
 
+      window.addEventListener('resize', () => {
+        if (this.open) this.alignPanel();
+      });
+
       this.updatePlaceholder();
     },
 
@@ -123,7 +127,21 @@
     openPanel() {
       this.open = true;
       this.panel.classList.remove('hidden');
+      this.alignPanel();
       MG.updateLayout();
+    },
+
+    alignPanel() {
+      if (!this.panel || !this.input) return;
+      const box = this.input.closest('.omnibox');
+      if (!box) return;
+      const rect = box.getBoundingClientRect();
+      const available = Math.max(240, window.innerWidth - rect.left - 12);
+      const width = Math.max(240, Math.min(rect.width, available));
+      this.panel.style.width = width + 'px';
+      this.panel.style.marginLeft = Math.max(0, Math.round(rect.left)) + 'px';
+      this.panel.style.marginRight = '0px';
+      this.panel.style.marginTop = '0px';
     },
 
     close() {
